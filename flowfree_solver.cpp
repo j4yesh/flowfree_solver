@@ -29,16 +29,13 @@ void printBoard(vector<vector<char>>board){
       if(board[row][col]==color[cidx].first && (row!=color[cidx].second.first
         && col!=color[cidx].second.second)){
         return true;
-      }else{
       }
-        // cout<<board[row][col]<<" "<<row<<" "<<col<<endl;
       for(auto it: sign){
-         if(
-          (row+it.first>=0 && row+it.first<board.size() && col+it.second>=0 && col+it.second<board[0].size())&&
-          board[row+it.first][col+it.second] == color[cidx].first && (row+it.first!=color[cidx].second.first || col+it.second!=color[cidx].second.second)){
+        int nextX=row+it.first;
+        int nextY=col+it.second;
+         if((nextX>=0 && nextX<board.size() && nextY>=0 && nextY<board[0].size())&&
+          board[nextX][nextY] == color[cidx].first && (nextX!=color[cidx].second.first || nextY!=color[cidx].second.second)){
            if(cidx+1==color.size()){
-            // board[row+it.first][col+it.second]=tolower(color[cidx].first);
-          //  cout<<endl<<board[row+it.first][col+it.second]<<" "<<row+it.first<<" "<<col+it.second<<endl;
             return true;
            }
            if(solution(board,color[cidx+1].second.first,color[cidx+1].second.second,color,cidx+1)){
@@ -46,12 +43,12 @@ void printBoard(vector<vector<char>>board){
            }
            return false;
          }
-         if(valid(board,row+it.first,col+it.second)){
-            board[row+it.first][col+it.second]=tolower(color[cidx].first);
-            if(solution(board,row+it.first,col+it.second,color,cidx)){
+         if(valid(board,nextX,nextY)){
+            board[nextX][nextY]=tolower(color[cidx].first);
+            if(solution(board,nextX,nextY,color,cidx)){
               return true;
             }
-            board[row+it.first][col+it.second]='_'; //:(
+            board[nextX][nextY]='_'; //:(
          }
       }
       return false;
@@ -94,7 +91,7 @@ int main()
   //             {'_','_','_','_','U','_','_','G','_'},
   //             {'_','B','G','_','_','_','_','_','R'},
   //             {'_','_','Y','_','O','_','_','_','_'},
-  //             {'_','_','B','_','_','_','_','C','_'},
+  //             {'_','_','B','_','_','_','_','z','_'},
   //             {'_','_','_','_','_','_','_','_','_'},
   //           }; //l22 9*9
 
@@ -110,7 +107,6 @@ int main()
     }
   }  
 
-  //master bum blastic fully funtastic :)
   int p=color.size();
   
 
@@ -118,13 +114,22 @@ int main()
   cout<<endl<<endl;
   // int sol=solution(board,color[0].second.first,color[0].second.second,color,0);
 
-  int sol=solution(board,0,0,color,0);
-
-  if(sol){
-    printBoard(board);
-  }else{
-    cout<<"solution not exist bro :("<<endl;
+  int sol;
+  for(int i=0;i<m;i++){
+    for(int j=0;j<n;j++){
+      if(board[i][j]!='_' && s.find(board[i][j])!=s.end()){
+        sol=solution(board,i,j,color,0);
+        if(sol){
+          printBoard(board); 
+        }else{
+          cout<<"solution does not exist bro :("<<endl;
+        }
+        return 0;
+      }
+    }
   }
+        // sol=solution(board,0,0,color,0);
+
 
   return 0;
 }
